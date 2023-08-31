@@ -9,7 +9,7 @@ const questions = [
     choices: [
       {
         value: 1,
-        name: `${'1.'.green} Look for a city`,
+        name: `${'1.'.green} Look for a location`,
       },
       {
         value: 2,
@@ -24,11 +24,8 @@ const questions = [
 ];
 
 const inquirerMenu = async () => {
-  // console.clear();
-  console.log('================='.green);
-  console.log('Choose an option:'.white);
-  console.log('=================\n'.green);
-
+  console.clear();
+  console.log('Welcome to Climate App!'.green.green);
   const { option } = await inquirer.prompt(questions);
 
   return option;
@@ -50,7 +47,7 @@ const readInput = async (message) => {
   const question = [
     {
       type: 'input',
-      name: 'Enter the name of the city',
+      name: 'location',
       message,
       validate(value) {
         if (value.length === 0) {
@@ -61,8 +58,8 @@ const readInput = async (message) => {
     },
   ];
 
-  const { description } = await inquirer.prompt(question);
-  return description;
+  const { location } = await inquirer.prompt(question);
+  return location;
 };
 
 const tasksListForDeletion = async (tasks = []) => {
