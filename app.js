@@ -25,8 +25,11 @@ const main = async () => {
 
         // Choose the place
         const selectedId = await listPlaces(places);
-
+        if (selectedId === '0') continue;
         const selectedPlace = places.find((place) => place.id === selectedId);
+
+        // Save information on DB
+        searches.addRecord(selectedPlace.name);
 
         // Find temperature data about the selected place
         const placeClimate = await searches.placeClimate(
@@ -44,6 +47,12 @@ const main = async () => {
         console.log('Maximum temperature:', placeClimate.max);
         console.log('Current temperature:', placeClimate.temp);
 
+        break;
+      case 2:
+        searches.capitalizedRecord.forEach((place, i) => {
+          const index = `${i + 1}. `.green;
+          console.log(`${index}${place}`);
+        });
         break;
     }
 

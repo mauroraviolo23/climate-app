@@ -1,9 +1,26 @@
+const fs = require('fs');
+
 const axios = require('axios');
 
 class Searches {
-  record = ['City', 'Other city', 'Another city'];
+  record = [];
+  dbPath = './database/database.json';
 
-  constructor() {}
+  constructor() {
+    this.readDB();
+  }
+
+  get capitalizedRecord() {
+    let capitalizedRecord = this.record.map((place) =>
+      place
+        .split(' ')
+        .map((word) =>
+          word[0].toUpperCase().concat(word.substring(1, word.length))
+        )
+        .join(' ')
+    );
+    return capitalizedRecord;
+  }
 
   get paramsMapbox() {
     return {
@@ -67,6 +84,33 @@ class Searches {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  addRecord(location = '') {
+    if (this.record.includes(location.toLowerCase())) return;
+
+    this.record = this.record.splice(0, 4);
+
+    this.record.unshift(location.toLowerCase());
+
+    this.saveDB();
+  }
+
+  saveDB() {
+    const payload = {
+      record: this.record,
+    };
+    fs.writeFileSync(this.dbPath, JSON.stringify(payload));
+  }
+
+  readDB() {
+    if (!fs.existsSync(this.dbPath)) return;
+
+    const fileInfo = fs.readFileSync(this.dbPath, { encoding: 'utf-8' });
+
+    const data = JSON.parse(fileInfo);
+
+    this.record = data.record;
   }
 }
 
